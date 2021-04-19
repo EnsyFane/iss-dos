@@ -1,0 +1,28 @@
+plugins {
+    id 'java'
+    id 'application'
+    id 'org.openjfx.javafxplugin' version '0.0.9'
+}
+
+group 'org.example'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 15
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile project(':Core')
+
+    compile('org.springframework:spring-context:5.2.14.RELEASE')
+
+    implementation('org.apache.logging.log4j:log4j-core:2.14.0')
+    implementation('org.apache.logging.log4j:log4j-api:2.14.0')
+}
+
+javafx {
+    version = "16"
+    modules = [ 'javafx.controls' , 'javafx.fxml']
+}

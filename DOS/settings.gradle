@@ -1,0 +1,5 @@
+rootProject.name = 'DOS'
+include 'Client'
+include 'Core'
+include 'Server'
+

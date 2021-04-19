@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--suppress SpringFacetInspection -->
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="appService" class="service.DOSService">
+    </bean>
+
+    <bean id="serviceExporter" class="org.springframework.remoting.rmi.RmiServiceExporter">
+        <property name="serviceName" value="Basketball"/>
+        <property name="service" ref="appService"/>
+        <property name="serviceInterface" value="service.IDOSService"/>
+        <property name="servicePort" value="1099"/>
+    </bean>
+
+</beans>
