@@ -8,7 +8,7 @@
     </bean>
 
     <bean id="serviceExporter" class="org.springframework.remoting.rmi.RmiServiceExporter">
-        <property name="serviceName" value="Basketball"/>
+        <property name="serviceName" value="DOS"/>
         <property name="service" ref="appService"/>
         <property name="serviceInterface" value="service.IDOSService"/>
         <property name="servicePort" value="1099"/>

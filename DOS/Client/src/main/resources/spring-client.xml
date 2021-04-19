@@ -5,7 +5,7 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
     <bean id="appService" class="org.springframework.remoting.rmi.RmiProxyFactoryBean">
-        <property name="serviceUrl" value="rmi://localhost:1099/Basketball"/>
+        <property name="serviceUrl" value="rmi://localhost:1099/DOS"/>
         <property name="serviceInterface" value="service.IDOSService"/>
     </bean>
 </beans>
