@@ -59,4 +59,19 @@ public class DOSService implements IDOSService {
 
         return null;
     }
+
+    @Override
+    public void logoutUser(String username) {
+        _logger.info("Logging user: {} out.", username);
+
+        var localClient = loggedClients.remove(username);
+        if (localClient == null) {
+            _logger.warn("No user logged in with username {}.", username);
+        }
+    }
+
+    @Override
+    public User addUser(User toAdd) {
+        return null;
+    }
 }
