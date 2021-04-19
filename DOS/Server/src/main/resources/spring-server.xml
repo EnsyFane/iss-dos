@@ -4,7 +4,12 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
+    <bean id="userRepo" class="repository.UserRepository">
+        <constructor-arg type="java.lang.String" value="jdbc:sqlite:D:\Facultate\AnII\ISS\iss-dos\DOS.sqlite"/>
+    </bean>
+
     <bean id="appService" class="service.DOSService">
+        <constructor-arg ref="userRepo"/>
     </bean>
 
     <bean id="serviceExporter" class="org.springframework.remoting.rmi.RmiServiceExporter">
