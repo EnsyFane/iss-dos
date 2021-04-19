@@ -73,11 +73,10 @@ public class LoginPageController {
         var userPage = new Stage();
         var newScene = new Scene(userPageLayout);
         userPage.setScene(newScene);
-        userPage.setTitle("D.O.S. - x Page");
         userPage.initOwner(stage);
         userPage.initModality(Modality.WINDOW_MODAL);
 
-        dummy userPageController = userPageLoader.getController();
+        UserPageController userPageController = userPageLoader.getController();
 
         User user;
         try {
@@ -99,7 +98,8 @@ public class LoginPageController {
             return;
         }
 
-         userPageController.init(service, userPage, user);
+        userPage.setTitle("D.O.S. - " + user.getUserType().toString() + " Page");
+        userPageController.init(service, userPage, user);
 
         stage.hide();
         tf_userName.setText("");

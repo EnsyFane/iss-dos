@@ -21,4 +21,11 @@ public enum UserType {
             default -> throw new IndexOutOfBoundsException();
         };
     }
+    public String toString() {
+        return switch (this) {
+            case Admin -> "Admin";
+            case PharmacyStaff -> "Pharmacy Staff";
+            case HospitalStaff -> "Hospital Staff";
+        };
+    }
 }
