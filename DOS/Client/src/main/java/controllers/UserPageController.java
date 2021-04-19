@@ -124,7 +124,7 @@ public class UserPageController extends UnicastRemoteObject implements IClientOb
 
         var selectedUserType = cb_addUserType.getSelectionModel().getSelectedIndex();
 
-        var userToAdd = new User(-1,
+        var userToAdd = new User(0,
                 tf_addUserName.getText(),
                 tf_addFirstName.getText(),
                 tf_addLastName.getText(),
@@ -141,5 +141,7 @@ public class UserPageController extends UnicastRemoteObject implements IClientOb
         } else {
             AlertMessage.showAlert(Alert.AlertType.WARNING, "User not added.", "User not added.", stage);
         }
+
+        handleCancelAddUser();
     }
 }

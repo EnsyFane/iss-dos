@@ -5,6 +5,7 @@ import domain.models.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import repository.IUserRepository;
+import utils.Constants;
 import utils.PasswordUtils;
 
 import java.util.Map;
@@ -72,6 +73,20 @@ public class DOSService implements IDOSService {
 
     @Override
     public User addUser(User toAdd) {
-        return null;
+        _logger.traceEntry("Adding user.");
+
+        toAdd.setSalt(PasswordUtils.generateSalt(Constants.SALT_LENGTH));
+        toAdd.setEncryptedPassword(PasswordUtils.encryptPassword(toAdd.getEncryptedPassword(), toAdd.getSalt()));
+
+        var response = userRepo.add(toAdd);
+
+        if (response.isEmpty()) {
+            _logger.traceExit("User added.");
+            return null;
+        }
+
+        _logger.traceExit("User not added.");
+
+        return response.get();
     }
 }
