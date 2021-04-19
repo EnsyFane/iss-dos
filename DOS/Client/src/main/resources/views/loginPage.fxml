@@ -4,38 +4,36 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="500.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/11.0.1"
-            xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.LoginPageController">
+<AnchorPane prefHeight="500.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.LoginPageController">
    <Label layoutX="317.0" layoutY="56.0" text="D.O.S." textAlignment="CENTER">
       <font>
-         <Font name="Sylfaen" size="61.0"/>
+         <Font name="Sylfaen" size="61.0" />
       </font>
    </Label>
    <Label layoutX="191.0" layoutY="151.0" text="The Drug Ordering System" textAlignment="CENTER">
       <font>
-         <Font name="Sylfaen" size="37.0"/>
+         <Font name="Sylfaen" size="37.0" />
       </font>
    </Label>
    <Label layoutX="193.5" layoutY="250.0" text="Username">
       <font>
-         <Font name="Sylfaen" size="20.0"/>
+         <Font name="Sylfaen" size="20.0" />
       </font>
    </Label>
    <Label layoutX="193.5" layoutY="301.0" text="Password">
       <font>
-         <Font name="Sylfaen" size="20.0"/>
+         <Font name="Sylfaen" size="20.0" />
       </font>
    </Label>
    <TextField fx:id="tf_userName" layoutX="313.0" layoutY="243.0" prefHeight="25.0" prefWidth="293.5">
       <font>
-         <Font name="Sylfaen" size="20.0"/>
+         <Font name="Sylfaen" size="20.0" />
       </font>
    </TextField>
    <PasswordField fx:id="tf_password" layoutX="313.0" layoutY="294.0" prefHeight="25.0" prefWidth="293.5">
       <font>
-         <Font name="Sylfaen" size="20.0"/>
+         <Font name="Sylfaen" size="20.0" />
       </font>
    </PasswordField>
-   <Button fx:id="btn_logIn" layoutX="305.0" layoutY="379.0" mnemonicParsing="false" prefHeight="53.0" prefWidth="191.0"
-           text="Log In"/>
+   <Button fx:id="btn_logIn" layoutX="305.0" layoutY="379.0" mnemonicParsing="false" onAction="#handleLogin" prefHeight="53.0" prefWidth="191.0" text="Log In" />
 </AnchorPane>
