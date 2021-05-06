@@ -7,6 +7,12 @@ import domain.validation.UserValidator;
 import domain.validation.ValidationException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
+import org.hibernate.boot.MetadataSources;
+import org.hibernate.boot.registry.StandardServiceRegistry;
+import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import utils.JdbcUtils;
 
 import java.sql.ResultSet;
@@ -21,6 +27,7 @@ public class UserRepository implements IUserRepository {
     private final IValidator<Integer, User> validator;
 
     private static final Logger _logger = LogManager.getLogger();
+    static SessionFactory sessionFactory;
 
     public UserRepository(String jdbcUrl) {
         _logger.info("Initializing User Repository.");
@@ -29,6 +36,18 @@ public class UserRepository implements IUserRepository {
         props.setProperty("jdbc.url", jdbcUrl);
         dbUtils = new JdbcUtils(props);
         validator = new UserValidator();
+
+        // A SessionFactory is set up once for an application!
+        final StandardServiceRegistry registry = new StandardServiceRegistryBuilder()
+                .configure() // configures settings from hibernate.cfg.xml
+                .build();
+        try {
+            sessionFactory = new MetadataSources( registry ).buildMetadata().buildSessionFactory();
+        }
+        catch (Exception e) {
+            System.err.println("Exception "+e);
+            StandardServiceRegistryBuilder.destroy( registry );
+        }
     }
 
     @Override
