@@ -1,11 +1,10 @@
 package utils;
 
+import java.util.Optional;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextInputDialog;
 import javafx.stage.Stage;
-
-import java.util.Optional;
 
 public class AlertMessage {
     /**

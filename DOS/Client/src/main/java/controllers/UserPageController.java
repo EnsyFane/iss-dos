@@ -2,6 +2,14 @@ package controllers;
 
 import domain.models.User;
 import domain.models.UserType;
+import service.IClientObserver;
+import service.IDOSService;
+import utils.AlertMessage;
+
+import java.io.Serializable;
+import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
+import java.sql.Date;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Alert;
@@ -13,14 +21,6 @@ import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import service.IClientObserver;
-import service.IDOSService;
-import utils.AlertMessage;
-
-import java.io.Serializable;
-import java.rmi.RemoteException;
-import java.rmi.server.UnicastRemoteObject;
-import java.sql.Date;
 
 public class UserPageController extends UnicastRemoteObject implements IClientObserver, Serializable {
     public AnchorPane adminLayout;
