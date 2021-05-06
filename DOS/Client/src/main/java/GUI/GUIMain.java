@@ -1,6 +1,9 @@
 package GUI;
 
 import controllers.LoginPageController;
+import service.IDOSService;
+
+import java.io.IOException;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -8,9 +11,6 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import service.IDOSService;
-
-import java.io.IOException;
 
 public class GUIMain extends Application {
     private static IDOSService service;
