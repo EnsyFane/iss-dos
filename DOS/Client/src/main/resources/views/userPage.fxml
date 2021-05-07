@@ -113,7 +113,7 @@
     </AnchorPane>
 
 <!--    change password sidenav-->
-    <AnchorPane fx:id="changePasswordSidenav" prefHeight="850.0" prefWidth="1200.0" visible="true">
+    <AnchorPane fx:id="changePasswordSidenav" prefHeight="850.0" prefWidth="1200.0" visible="false">
         <!--        black overlay-->
         <Rectangle fill="#000000b0" height="858.0" onMouseClicked="#handleCancelChangePassword" width="1200.0" />
         <!--        white box-->
