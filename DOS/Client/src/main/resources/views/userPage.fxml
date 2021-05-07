@@ -6,6 +6,7 @@
 <?import javafx.scene.text.*?>
 
 <AnchorPane prefHeight="845.0" prefWidth="1195.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.UserPageController">
+<!--    admin layout-->
     <AnchorPane fx:id="adminLayout" prefHeight="850.0" prefWidth="1200.0">
 <!--        header-->
         <Rectangle fill="#8b8b8b" height="82.0" width="1200.0" />
@@ -21,52 +22,71 @@
                 <Font name="Sylfaen" size="20.0" />
             </font>
         </Label>
+
 <!--        add user button-->
         <Circle fill="#0641a8" layoutX="1087.0" layoutY="757.0" onMouseClicked="#handleAddUser" radius="30.0" stroke="#707070" strokeType="INSIDE" />
 <!--        plus icon-->
         <SVGPath content="M36,15.545v4.909a2.445,2.445,0,0,1-2.455,2.455H22.909V33.545A2.445,2.445,0,0,1,20.454,36H15.545a2.445,2.445,0,0,1-2.455-2.455V22.909H2.455a2.368,2.368,0,0,1-1.739-.716A2.366,2.366,0,0,1,0,20.455v-4.91a2.368,2.368,0,0,1,.716-1.739,2.368,2.368,0,0,1,1.739-.716H13.091V2.455A2.368,2.368,0,0,1,13.807.716,2.368,2.368,0,0,1,15.546,0h4.909a2.368,2.368,0,0,1,1.739.716,2.368,2.368,0,0,1,.716,1.739V13.091H33.546A2.445,2.445,0,0,1,36,15.546Z" fill="WHITE" layoutX="1069.0" layoutY="739.0" onMouseClicked="#handleAddUser" />
     </AnchorPane>
+
+<!--    pharmacy layout-->
     <AnchorPane fx:id="pharmacyLayout" prefHeight="850.0" prefWidth="1200.0">
-
     </AnchorPane>
+
+<!--    hospital layout-->
     <AnchorPane fx:id="hospitalLayout" prefHeight="850.0" prefWidth="1200.0">
-
     </AnchorPane>
+
+<!--    add user sidenav-->
     <AnchorPane fx:id="addUserSidenav" prefHeight="850.0" prefWidth="1200.0" visible="false">
 <!--        black overlay-->
         <Rectangle fill="#000000b0" height="858.0" onMouseClicked="#handleCancelAddUser" width="1200.0" />
 <!--        white box-->
         <Rectangle fill="#ffffff" height="850.0" layoutX="770.0" width="430.0" />
+
+<!--        fields-->
         <Label layoutX="813.0" layoutY="160.0" text="User Name" textAlignment="CENTER" textFill="BLACK">
             <font>
                 <Font name="Sylfaen" size="20.0" />
             </font>
         </Label>
+        <TextField fx:id="tf_addUserName" layoutX="920.5" layoutY="160.0" prefWidth="241.0" />
+
         <Label layoutX="813.0" layoutY="212.0" text="First Name" textAlignment="CENTER" textFill="BLACK">
             <font>
                 <Font name="Sylfaen" size="20.0" />
             </font>
         </Label>
+        <TextField fx:id="tf_addFirstName" layoutX="920.5" layoutY="212.0" prefWidth="241.0" />
+
         <Label layoutX="813.0" layoutY="264.0" text="Last Name" textAlignment="CENTER" textFill="BLACK">
             <font>
                 <Font name="Sylfaen" size="20.0" />
             </font>
         </Label>
+        <TextField fx:id="tf_addLastName" layoutX="920.5" layoutY="264.0" prefWidth="241.0" />
+
         <Label layoutX="813.0" layoutY="316.0" text="Password" textAlignment="CENTER" textFill="BLACK">
             <font>
                 <Font name="Sylfaen" size="20.0" />
             </font>
         </Label>
+        <PasswordField fx:id="tf_addPassword" layoutX="920.5" layoutY="316.0" prefHeight="25.0" prefWidth="241.0" />
+
         <Label layoutX="813.0" layoutY="368.0" text="User Type" textAlignment="CENTER" textFill="BLACK">
             <font>
                 <Font name="Sylfaen" size="20.0" />
             </font>
         </Label>
+        <ComboBox fx:id="cb_addUserType" layoutX="920.5" layoutY="368.0" prefHeight="25.0" prefWidth="241.0" />
+
         <Label layoutX="813.0" layoutY="420.0" text="E-Mail" textAlignment="CENTER" textFill="BLACK">
             <font>
                 <Font name="Sylfaen" size="20.0" />
             </font>
         </Label>
+        <TextField fx:id="tf_addEmail" layoutX="920.5" layoutY="420.0" prefWidth="241.0" />
+
 <!--        header-->
         <Rectangle fill="#8b8b8b" height="82.0" layoutX="770.0" width="430.0" />
         <Label layoutX="932.0" layoutY="28.0" text="Adding User" textAlignment="CENTER" textFill="WHITE">
@@ -74,6 +94,7 @@
                 <Font name="Sylfaen" size="20.0" />
             </font>
         </Label>
+
 <!--        cancel button-->
         <Rectangle fill="#8b8b8b" height="82.0" layoutX="770.0" layoutY="776.0" onMouseClicked="#handleCancelAddUser" stroke="#707070" strokeType="INSIDE" width="215.0" />
         <Label layoutX="849.0" layoutY="804.0" text="Cancel" textAlignment="CENTER" textFill="BLACK" onMouseClicked="#handleCancelAddUser">
@@ -81,6 +102,7 @@
                 <Font name="Sylfaen" size="20.0" />
             </font>
         </Label>
+
 <!--        add button-->
         <Rectangle fx:id="btn_confirmAddUser" fill="#8b8b8b" height="82.0" layoutX="985.0" layoutY="776.0" stroke="#707070" strokeType="INSIDE" width="215.0" onMouseClicked="#handleConfirmAddUser" />
         <Label layoutX="1075.0" layoutY="804.0" text="Add" textAlignment="CENTER" textFill="BLACK" onMouseClicked="#handleConfirmAddUser">
@@ -88,11 +110,5 @@
                 <Font name="Sylfaen" size="20.0" />
             </font>
         </Label>
-      <TextField fx:id="tf_addUserName" layoutX="920.5" layoutY="160.0" prefWidth="241.0" />
-        <TextField fx:id="tf_addFirstName" layoutX="920.5" layoutY="212.0" prefWidth="241.0" />
-        <TextField fx:id="tf_addLastName" layoutX="920.5" layoutY="264.0" prefWidth="241.0" />
-        <PasswordField fx:id="tf_addPassword" layoutX="920.5" layoutY="316.0" prefHeight="25.0" prefWidth="241.0" />
-        <TextField fx:id="tf_addEmail" layoutX="920.5" layoutY="420.0" prefWidth="241.0" />
-      <ComboBox fx:id="cb_addUserType" layoutX="920.5" layoutY="368.0" prefHeight="25.0" prefWidth="241.0" />
     </AnchorPane>
 </AnchorPane>
