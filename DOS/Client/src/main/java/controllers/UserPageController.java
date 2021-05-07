@@ -2,6 +2,7 @@ package controllers;
 
 import domain.models.User;
 import domain.models.UserType;
+import javafx.scene.input.MouseEvent;
 import service.IClientObserver;
 import service.IDOSService;
 import utils.AlertMessage;
@@ -35,12 +36,19 @@ public class UserPageController extends UnicastRemoteObject implements IClientOb
 
     public AnchorPane pharmacyLayout;
     public AnchorPane hospitalLayout;
+    
+    public AnchorPane changePasswordSidenav;
+        public PasswordField tf_changeOldPassword;
+        public PasswordField tf_changeNewPassword;
+        public PasswordField tf_changeConfirmPassword;
+        public Rectangle btn_confirmChangePassword;
 
     private IDOSService service;
     private Stage stage;
     private User user;
 
     private boolean isConfirmAddUserButtonDisabled;
+    private boolean isConfirmChangePasswordButtonDisabled;
 
     private static final Logger _logger = LogManager.getLogger();
 
@@ -83,6 +91,11 @@ public class UserPageController extends UnicastRemoteObject implements IClientOb
         tf_addEmail.textProperty().addListener(tx -> updateConfirmAddUserButtonStatus());
         updateConfirmAddUserButtonStatus();
 
+        tf_changeOldPassword.textProperty().addListener(tx -> updateConfirmChangePasswordButtonStatus());
+        tf_changeNewPassword.textProperty().addListener(tx -> updateConfirmChangePasswordButtonStatus());
+        tf_changeConfirmPassword.textProperty().addListener(tx -> updateConfirmChangePasswordButtonStatus());
+        updateConfirmChangePasswordButtonStatus();
+
         ObservableList<String> userTypes = FXCollections.observableArrayList();
         userTypes.add(UserType.Admin.toString());
         userTypes.add(UserType.PharmacyStaff.toString());
@@ -98,6 +111,16 @@ public class UserPageController extends UnicastRemoteObject implements IClientOb
         shouldDisableButton |= tf_addEmail.getText().isEmpty();
 
         isConfirmAddUserButtonDisabled = shouldDisableButton;
+    }
+
+    private void updateConfirmChangePasswordButtonStatus() {
+        var shouldDisableButton = tf_changeOldPassword.getText().isEmpty();
+        shouldDisableButton |= tf_changeNewPassword.getText().isEmpty();
+        shouldDisableButton |= tf_changeConfirmPassword.getText().isEmpty();
+        shouldDisableButton |= !tf_changeConfirmPassword.getText().equals(tf_changeNewPassword.getText());
+        shouldDisableButton |= tf_changeNewPassword.getText().equals(tf_changeOldPassword.getText());
+
+        isConfirmChangePasswordButtonDisabled = shouldDisableButton;
     }
 
     public void handleCancelAddUser() {
@@ -143,5 +166,35 @@ public class UserPageController extends UnicastRemoteObject implements IClientOb
         }
 
         handleCancelAddUser();
+    }
+
+    public void handleCancelChangePassword() {
+        tf_changeOldPassword.setText("");
+        tf_changeNewPassword.setText("");
+        tf_changeConfirmPassword.setText("");
+
+        changePasswordSidenav.setVisible(false);
+    }
+
+    public void handleChangePassword() {
+        tf_changeOldPassword.requestFocus();
+
+        changePasswordSidenav.setVisible(true);
+    }
+
+    public void handleConfirmChangePassword() {
+        if (!isConfirmChangePasswordButtonDisabled) {
+            return;
+        }
+
+        var result = service.changePassword(user.getId(), tf_changeOldPassword.getText(), tf_changeNewPassword.getText());
+
+        if (result) {
+            AlertMessage.showAlert(Alert.AlertType.INFORMATION, "Password changed.", "Password changed.", stage);
+        } else {
+            AlertMessage.showAlert(Alert.AlertType.WARNING, "Password not changed.", "Password not changed.", stage);
+        }
+
+        handleCancelChangePassword();
     }
 }

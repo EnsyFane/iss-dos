@@ -9,4 +9,6 @@ public interface IDOSService {
     void logoutUser(String username);
 
     User addUser(User toAdd);
+
+    boolean changePassword(Integer userId, String oldPassword, String newPassword);
 }

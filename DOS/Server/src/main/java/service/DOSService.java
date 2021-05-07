@@ -9,6 +9,7 @@ import repository.IUserRepository;
 import utils.Constants;
 import utils.PasswordUtils;
 
+import java.sql.Date;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -91,5 +92,38 @@ public class DOSService implements IDOSService {
         _logger.traceExit("User not added.");
 
         return response.get();
+    }
+
+    @Override
+    public boolean changePassword(Integer userId, String oldPassword, String newPassword) {
+        _logger.traceEntry("Trying to change the password for {}.", userId);
+
+        var user = userRepo.getById(userId);
+
+        if (user.isEmpty()) {
+            _logger.traceExit("No user with given id.");
+
+            return false;
+        }
+
+        if (!user.get().getEncryptedPassword().equals(PasswordUtils.encryptPassword(oldPassword, user.get().getSalt()))) {
+            _logger.traceExit("Old password isn't correct.");
+
+            return false;
+        }
+
+        user.get().setEncryptedPassword(PasswordUtils.encryptPassword(newPassword, user.get().getSalt()));
+        user.get().setNextPasswordChange(new Date(System.currentTimeMillis() + Constants.DISTANCE_BETWEEN_PASSWORD_CHANGES));
+
+        var result = userRepo.update(user.get());
+        if (result.isEmpty()) {
+            _logger.traceExit("User could not be updated.");
+
+            return false;
+        }
+
+        _logger.traceExit("Password changed.");
+
+        return true;
     }
 }
