@@ -3,6 +3,7 @@ package domain.models;
 import utils.Constants;
 
 import java.sql.Date;
+import java.util.Objects;
 
 public class User extends Entity<Integer> {
     private String userName;
@@ -90,6 +91,26 @@ public class User extends Entity<Integer> {
 
     public void setNextPasswordChange(Date nextPasswordChange) {
         this.nextPasswordChange = nextPasswordChange;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return getUserName().equals(user.getUserName()) &&
+                getFirstName().equals(user.getFirstName()) &&
+                getLastName().equals(user.getLastName()) &&
+                getEncryptedPassword().equals(user.getEncryptedPassword()) &&
+                getSalt().equals(user.getSalt()) &&
+                getUserType() == user.getUserType() &&
+                getEmail().equals(user.getEmail()) &&
+                getNextPasswordChange().equals(user.getNextPasswordChange());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getUserName(), getFirstName(), getLastName(), getEncryptedPassword(), getSalt(), getUserType(), getEmail(), getNextPasswordChange());
     }
 
     public static class Builder {
