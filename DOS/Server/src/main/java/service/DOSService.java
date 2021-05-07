@@ -4,6 +4,7 @@ import domain.dto.UserDTO;
 import domain.models.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import repository.IDrugRepository;
 import repository.IUserRepository;
 import utils.Constants;
 import utils.PasswordUtils;
@@ -13,15 +14,17 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class DOSService implements IDOSService {
     private final IUserRepository userRepo;
+    private final IDrugRepository drugRepo;
 
     private final Map<String, IClientObserver> loggedClients;
 
     private static final Logger _logger = LogManager.getLogger();
 
-    public DOSService(IUserRepository userRepo) {
+    public DOSService(IUserRepository userRepo, IDrugRepository drugRepo) {
         _logger.info("Initializing DOS Service.");
 
         this.userRepo = userRepo;
+        this.drugRepo = drugRepo;
 
         loggedClients = new ConcurrentHashMap<>();
     }
