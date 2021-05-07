@@ -108,7 +108,7 @@ public class User extends Entity<Integer> {
             _userName = "user-name";
             _firstName = "first-name";
             _lastName = "last-name";
-            _encryptedPassword = "encrypted-password";
+            _encryptedPassword = "a".repeat(Constants.ENCRYPTED_PASSWORD_LENGTH);
             _salt = "a".repeat(Constants.SALT_LENGTH);
             _userType = UserType.Admin;
             _email = "email@dos.com";
