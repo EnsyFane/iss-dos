@@ -1,0 +1,51 @@
+.table-view {
+    -fx-background-color: transparent;
+    -fx-font-family: Sylfaen;
+    -fx-font-size: 20;
+}
+
+.table-view .column-header {
+    -fx-background-color: transparent;
+    -fx-border-width: 0px 0px 1px 0px;
+    -fx-border-color: #707070;
+    -fx-pref-height: 74px;
+}
+
+.table-view .column-header-background{
+    -fx-background-color: transparent;
+    -fx-pref-height: 74px;
+}
+
+.table-view .table-cell {
+    -fx-max-height: 74px;
+    -fx-pref-height: 74px;
+    -fx-border-width: 0px 0px 1px 0px;
+    -fx-border-color: #707070;
+    -fx-border-style: solid inside;
+}
+
+.table-row-cell:even {
+    -fx-background-color: white;
+}
+
+.table-row-cell:odd {
+    -fx-background-color: white;
+}
+
+/*.table-row-cell:even:empty {*/
+/*    -fx-background-color: white;*/
+/*}*/
+
+/*.table-row-cell:odd:empty {*/
+/*    -fx-background-color: white;*/
+/*}*/
+
+/*.table-row-cell:empty {*/
+/*    -fx-background-color: white;*/
+/*    -fx-border-color: transparent;*/
+/*    -fx-table-cell-border-color: transparent;*/
+/*}*/
+
+.table-view .table-column {
+    -fx-alignment: center;
+}

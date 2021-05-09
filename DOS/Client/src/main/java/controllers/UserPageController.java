@@ -1,8 +1,14 @@
 package controllers;
 
+import domain.dto.DrugDTO;
 import domain.models.User;
 import domain.models.UserType;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.SVGPath;
 import service.IClientObserver;
 import service.IDOSService;
 import utils.AlertMessage;
@@ -13,10 +19,6 @@ import java.rmi.server.UnicastRemoteObject;
 import java.sql.Date;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
@@ -36,6 +38,16 @@ public class UserPageController extends UnicastRemoteObject implements IClientOb
 
     public AnchorPane pharmacyLayout;
     public AnchorPane hospitalLayout;
+        public Label lbl_availableDrugs;
+            public TableView<DrugDTO> tv_hospitalDrugs;
+            public TableColumn<DrugDTO, Boolean> tc_hospitalDrugsCheckBox;
+            public TableColumn<DrugDTO, String> tc_hospitalDrugsName;
+            public TableColumn<DrugDTO, String> tc_hospitalDrugsDescription;
+            public TableColumn<DrugDTO, Integer> tc_hospitalDrugsInStock;
+            public TableColumn<DrugDTO, Integer> tc_hospitalDrugsToOrder;
+            public Circle btn_placeOrderBG;
+            public SVGPath btn_placeOrderSVG;
+        public Label lbl_drugOrders;
     
     public AnchorPane changePasswordSidenav;
         public PasswordField tf_changeOldPassword;
@@ -49,6 +61,8 @@ public class UserPageController extends UnicastRemoteObject implements IClientOb
 
     private boolean isConfirmAddUserButtonDisabled;
     private boolean isConfirmChangePasswordButtonDisabled;
+
+    private transient final ObservableList<DrugDTO> hospitalDrugs = FXCollections.observableArrayList();
 
     private static final Logger _logger = LogManager.getLogger();
 
@@ -66,14 +80,14 @@ public class UserPageController extends UnicastRemoteObject implements IClientOb
     private void initComponents() {
         stage.setResizable(false);
 
-        if (user.getUserType() != UserType.Admin) {
-            adminLayout.setVisible(false);
-        }
-        if (user.getUserType() != UserType.PharmacyStaff) {
-            pharmacyLayout.setVisible(false);
-        }
-        if (user.getUserType() != UserType.HospitalStaff) {
-            hospitalLayout.setVisible(false);
+        adminLayout.setVisible(false);
+        pharmacyLayout.setVisible(false);
+        hospitalLayout.setVisible(false);
+
+        switch (user.getUserType()){
+            case Admin -> adminLayout.setVisible(true);
+            case PharmacyStaff -> pharmacyLayout.setVisible(true);
+            case HospitalStaff -> hospitalLayout.setVisible(true);
         }
 
         stage.setOnCloseRequest(tx -> {
@@ -101,6 +115,68 @@ public class UserPageController extends UnicastRemoteObject implements IClientOb
         userTypes.add(UserType.PharmacyStaff.toString());
         userTypes.add(UserType.HospitalStaff.toString());
         cb_addUserType.setItems(userTypes);
+
+        btn_placeOrderBG.setVisible(false);
+        btn_placeOrderSVG.setVisible(false);
+
+        setupHospitalDrugsTable();
+        updateTables();
+    }
+
+    private void updateTables() {
+        _logger.traceEntry("Updating tables.");
+
+        var drugs = service.getAvailableDrugs();
+
+        _logger.info("Received available drugs.");
+
+        hospitalDrugs.setAll(drugs);
+
+        _logger.traceExit("Updated tables.");
+    }
+
+    private void setupHospitalDrugsTable() {
+        tc_hospitalDrugsCheckBox.setCellValueFactory(c -> {
+            var checkBox = new CheckBox();
+            if (c.getValue().getInStock() <= 0) {
+                checkBox.selectedProperty().setValue(false);
+                checkBox.setDisable(true);
+            } else {
+                checkBox.selectedProperty().setValue(c.getValue().getSelected());
+                checkBox.selectedProperty()
+                        .addListener((ov, old_val, new_val) -> {
+                            c.getValue().setSelected(new_val);
+                            if (!new_val) {
+                                c.getValue().setToOrder(0);
+                            }
+                            updateSendOrderButtonState(0);
+                            tv_hospitalDrugs.refresh();
+                        });
+            }
+            //noinspection rawtypes,unchecked,unchecked
+            return new SimpleObjectProperty(checkBox);
+        });
+        tc_hospitalDrugsName.setCellValueFactory(new PropertyValueFactory<>("name"));
+        tc_hospitalDrugsDescription.setCellValueFactory(new PropertyValueFactory<>("description"));
+        tc_hospitalDrugsInStock.setCellValueFactory(new PropertyValueFactory<>("inStock"));
+        tc_hospitalDrugsToOrder.setCellValueFactory(c -> {
+            var spinner = new Spinner<Integer>();
+            if (!c.getValue().getSelected()) {
+                spinner.setDisable(true);
+                c.getValue().setToOrder(0);
+            }
+
+            spinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, c.getValue().getInStock(), c.getValue().getToOrder()));
+            spinner.valueProperty()
+                    .addListener((ov,old_val,new_val) -> c.getValue().setToOrder(new_val));
+            spinner.valueProperty()
+                    .addListener((ov, old_val, new_val) -> updateSendOrderButtonState(new_val));
+
+            //noinspection rawtypes,unchecked,unchecked
+            return new SimpleObjectProperty(spinner);
+        });
+
+        tv_hospitalDrugs.setItems(hospitalDrugs);
     }
 
     private void updateConfirmAddUserButtonStatus() {
@@ -196,5 +272,36 @@ public class UserPageController extends UnicastRemoteObject implements IClientOb
         }
 
         handleCancelChangePassword();
+    }
+
+    private void updateSendOrderButtonState(int spinner_val) {
+        if (spinner_val > 0) {
+            btn_placeOrderBG.setVisible(true);
+            btn_placeOrderSVG.setVisible(true);
+        } else {
+            var toOrderDrugs = hospitalDrugs
+                    .stream()
+                    .filter(DrugDTO::getSelected)
+                    .filter(d -> d.getToOrder() > 0)
+                    .count();
+
+            btn_placeOrderBG.setVisible(toOrderDrugs > 0);
+            btn_placeOrderSVG.setVisible(toOrderDrugs > 0);
+        }
+    }
+
+    public void handleSendOrder() {
+        var response = AlertMessage.showAlert(Alert.AlertType.INFORMATION, "Place order.", "Are you sure you want to place this order?", stage, ButtonType.YES, ButtonType.NO);
+
+        if (response.isEmpty()) {
+            return;
+        } else {
+            if (response.get().getButtonData().isCancelButton()) {
+                return;
+            }
+        }
+
+        AlertMessage.showAlert(Alert.AlertType.INFORMATION, "ad", "ad", stage);
+        // TODO: send order
     }
 }

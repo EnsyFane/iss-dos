@@ -1,6 +1,8 @@
 package service;
 
+import domain.dto.DrugDTO;
 import domain.dto.UserDTO;
+import domain.models.Drug;
 import domain.models.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -10,8 +12,10 @@ import utils.Constants;
 import utils.PasswordUtils;
 
 import java.sql.Date;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 public class DOSService implements IDOSService {
     private final IUserRepository userRepo;
@@ -127,5 +131,20 @@ public class DOSService implements IDOSService {
         _logger.traceExit("Password changed.");
 
         return true;
+    }
+
+    @Override
+    public List<DrugDTO> getAvailableDrugs() {
+        _logger.traceEntry("Getting all available drugs.");
+
+        var drugs = drugRepo.getAvailableDrugs();
+        var converted = drugs
+                .stream()
+                .map(d -> new DrugDTO(false, d.getName(), d.getDescription(), d.getInStock(), 0))
+                .collect(Collectors.toList());
+
+        _logger.traceExit("Got {} drugs.", drugs.size());
+
+        return converted;
     }
 }

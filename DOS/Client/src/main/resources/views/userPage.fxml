@@ -7,7 +7,7 @@
 
 <AnchorPane prefHeight="845.0" prefWidth="1195.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.UserPageController">
 <!--    admin layout-->
-    <AnchorPane fx:id="adminLayout" prefHeight="850.0" prefWidth="1200.0">
+    <AnchorPane fx:id="adminLayout" prefHeight="850.0" prefWidth="1200.0" visible="false">
 <!--        header-->
         <Rectangle fill="#8b8b8b" height="82.0" width="1200.0" />
         <Label layoutX="497.0" layoutY="28.0" text="D.O.S - Admin Terminal" textAlignment="CENTER" textFill="WHITE">
@@ -17,7 +17,7 @@
         </Label>
 <!--        sub header-->
         <Rectangle fill="#d8d8d8" height="82.0" layoutY="82" width="1200.0" />
-        <Label layoutX="581.0" layoutY="110.0" text="Staff" textAlignment="CENTER" textFill="WHITE">
+        <Label layoutX="581.0" layoutY="110.0" text="Staff" textAlignment="CENTER" textFill="BLACK">
             <font>
                 <Font name="Sylfaen" size="20.0" />
             </font>
@@ -30,11 +30,48 @@
     </AnchorPane>
 
 <!--    pharmacy layout-->
-    <AnchorPane fx:id="pharmacyLayout" prefHeight="850.0" prefWidth="1200.0">
+    <AnchorPane fx:id="pharmacyLayout" prefHeight="850.0" prefWidth="1200.0" visible="false">
     </AnchorPane>
 
 <!--    hospital layout-->
-    <AnchorPane fx:id="hospitalLayout" prefHeight="850.0" prefWidth="1200.0">
+    <AnchorPane fx:id="hospitalLayout" prefHeight="850.0" prefWidth="1200.0" visible="false">
+<!--        header-->
+        <Rectangle fill="#8b8b8b" height="82.0" width="1200.0" />
+        <Label layoutX="497.0" layoutY="28.0" text="D.O.S - Admin Terminal" textAlignment="CENTER" textFill="WHITE">
+            <font>
+                <Font name="Sylfaen" size="20.0" />
+            </font>
+        </Label>
+<!--        sub header left-->
+        <Rectangle fill="#d8d8d8" height="82.0" layoutY="82" width="600.0" />
+        <Label fx:id="lbl_availableDrugs" layoutX="233.0" layoutY="110.0" text="Available Drugs" textAlignment="CENTER" textFill="BLACK" underline="true">
+            <font>
+                <Font name="Sylfaen" size="20.0" />
+            </font>
+        </Label>
+<!--        sub header right-->
+        <Rectangle fill="#d8d8d8" height="82.0" layoutX="600" layoutY="82" width="600.0" />
+        <Label fx:id="lbl_drugOrders" layoutX="848.0" layoutY="110.0" text="Drug Orders" textAlignment="CENTER" textFill="BLACK">
+            <font>
+                <Font name="Sylfaen" size="20.0" />
+            </font>
+        </Label>
+
+        <TableView fx:id="tv_hospitalDrugs" focusTraversable="false" layoutY="164.0" prefHeight="695.0" prefWidth="1200.0" stylesheets="@../css/table.css">
+            <columns>
+                <TableColumn fx:id="tc_hospitalDrugsCheckBox" prefWidth="75.0" text="‎" />
+                <TableColumn fx:id="tc_hospitalDrugsName" prefWidth="223.0" text="Name" />
+                <TableColumn fx:id="tc_hospitalDrugsDescription" prefWidth="600.0" text="Description" />
+                <TableColumn fx:id="tc_hospitalDrugsInStock" prefWidth="150.0" text="In Stock" />
+                <TableColumn fx:id="tc_hospitalDrugsToOrder" prefWidth="150.0" text="To Order" />
+            </columns>
+        </TableView>
+
+<!--        place order button-->
+        <Circle fx:id="btn_placeOrderBG" fill="#0641a8" layoutX="1087.0" layoutY="757.0" onMouseClicked="#handleSendOrder" radius="30.0" stroke="#707070" strokeType="INSIDE" />
+<!--        arrow icon-->
+        <SVGPath fx:id="btn_placeOrderSVG" content="M25.078-20.926v-2.217a2.336,2.336,0,0,0-.554-1.567,1.8,1.8,0,0,0-1.44-.65H11.091l4.991-5.092a2.075,2.075,0,0,0,.647-1.559,2.075,2.075,0,0,0-.647-1.559L14.8-34.887a2.07,2.07,0,0,0-1.533-.641,2.161,2.161,0,0,0-1.55.641L.631-23.594A2.14,2.14,0,0,0,0-22.035a2.236,2.236,0,0,0,.631,1.576L11.721-9.2a2.1,2.1,0,0,0,1.55.658A2.079,2.079,0,0,0,14.8-9.2l1.278-1.282a2.168,2.168,0,0,0,.647-1.576,2.168,2.168,0,0,0-.647-1.576l-4.992-5.076H23.084a1.8,1.8,0,0,0,1.439-.65A2.339,2.339,0,0,0,25.078-20.926Z" fill="WHITE" layoutX="1074.0" layoutY="779.0" onMouseClicked="#handleSendOrder" rotate="180.0" />
+
     </AnchorPane>
 
 <!--    add user sidenav-->
