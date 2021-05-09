@@ -5,7 +5,7 @@ import domain.validation.ValidationException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import test.utils.TestConstants;
+import utils.TestConstants;
 
 import java.io.FileReader;
 import java.io.IOException;

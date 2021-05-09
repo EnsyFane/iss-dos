@@ -79,8 +79,10 @@ public class DOSService implements IDOSService {
     public User addUser(User toAdd) {
         _logger.traceEntry("Adding user.");
 
-        toAdd.setSalt(PasswordUtils.generateSalt(Constants.SALT_LENGTH));
-        toAdd.setEncryptedPassword(PasswordUtils.encryptPassword(toAdd.getEncryptedPassword(), toAdd.getSalt()));
+        if (toAdd.getSalt().isEmpty()) {
+            toAdd.setSalt(PasswordUtils.generateSalt(Constants.SALT_LENGTH));
+            toAdd.setEncryptedPassword(PasswordUtils.encryptPassword(toAdd.getEncryptedPassword(), toAdd.getSalt()));
+        }
 
         var response = userRepo.add(toAdd);
 

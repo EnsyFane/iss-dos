@@ -1,6 +1,7 @@
 package domain.models;
 
 import utils.Constants;
+import utils.PasswordUtils;
 
 import java.sql.Date;
 import java.util.Objects;
@@ -191,6 +192,11 @@ public class User extends Entity<Integer> {
 
         public Builder withNextPasswordChange(Date nextPasswordChange) {
             _nextPasswordChange = nextPasswordChange;
+            return this;
+        }
+
+        public Builder withPassword(String password) {
+            _encryptedPassword = PasswordUtils.encryptPassword(password, _salt);
             return this;
         }
 
