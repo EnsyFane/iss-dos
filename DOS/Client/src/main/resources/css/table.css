@@ -6,7 +6,7 @@
 
 .table-view .column-header {
     -fx-background-color: transparent;
-    -fx-border-width: 0px 0px 1px 0px;
+    -fx-border-width: 0px 1px 1px 0px;
     -fx-border-color: #707070;
     -fx-pref-height: 74px;
 }

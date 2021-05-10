@@ -5,10 +5,7 @@ import domain.models.User;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import repository.DrugRepository;
-import repository.IDrugRepository;
-import repository.IUserRepository;
-import repository.UserRepository;
+import repository.*;
 import utils.Constants;
 import utils.PasswordUtils;
 import utils.TestConstants;
@@ -23,6 +20,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class TestService {
     private static IUserRepository _userRepo;
     private static IDrugRepository _drugRepo;
+    private static IOrderRepository _orderRepo;
     private static IDOSService _service;
 
     @BeforeAll
@@ -38,10 +36,12 @@ public class TestService {
 
         _userRepo = new UserRepository(props.getProperty("jdbc.url"));
         _drugRepo = new DrugRepository(props.getProperty("jdbc.url"));
+        _orderRepo = new OrderRepository(props.getProperty("jdbc.url"));
         _userRepo.clear();
         _drugRepo.clear();
+        _orderRepo.clear();
 
-        _service = new DOSService(_userRepo, _drugRepo);
+        _service = new DOSService(_userRepo, _drugRepo, _orderRepo);
     }
 
     @AfterEach

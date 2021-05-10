@@ -1,6 +1,7 @@
 package service;
 
 import domain.dto.DrugDTO;
+import domain.dto.OrderDTO;
 import domain.dto.UserDTO;
 import domain.models.Drug;
 import domain.models.Order;
@@ -20,4 +21,6 @@ public interface IDOSService {
     List<DrugDTO> getAvailableDrugs();
 
     boolean placeOrder(Order order);
+
+    List<OrderDTO> getOrders();
 }

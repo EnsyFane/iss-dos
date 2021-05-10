@@ -1,6 +1,7 @@
 package service;
 
 import domain.dto.DrugDTO;
+import domain.dto.OrderDTO;
 import domain.dto.UserDTO;
 import domain.models.Order;
 import domain.models.User;
@@ -168,5 +169,24 @@ public class DOSService implements IDOSService {
         }
 
         return result.isEmpty();
+    }
+
+    @Override
+    public List<OrderDTO> getOrders() {
+        _logger.traceEntry("Getting all orders.");
+
+        var orders = orderRepo.getAll();
+        var converted = orders
+                .stream()
+                .map(d -> {
+                    var user = userRepo.getById(d.getOrderedBy());
+                    var name = user.map(value -> value.getFirstName() + " " + value.getLastName()).orElseGet(() -> d.getOrderedBy().toString());
+                    return new OrderDTO(name, d.getDelivered(), d.getOrderedAt(), d.getDeliveredAt());
+                })
+                .collect(Collectors.toList());
+
+        _logger.traceExit("Got {} orders.", orders.size());
+
+        return converted;
     }
 }

@@ -1,10 +1,12 @@
 package controllers;
 
 import domain.dto.DrugDTO;
+import domain.dto.OrderDTO;
 import domain.models.Order;
 import domain.models.User;
 import domain.models.UserType;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.shape.Circle;
@@ -17,6 +19,7 @@ import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.sql.Date;
+import java.text.SimpleDateFormat;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -41,14 +44,19 @@ public class UserPageController extends UnicastRemoteObject implements IClientOb
     public AnchorPane hospitalLayout;
         public Label lbl_availableDrugs;
             public TableView<DrugDTO> tv_hospitalDrugs;
-            public TableColumn<DrugDTO, Boolean> tc_hospitalDrugsCheckBox;
-            public TableColumn<DrugDTO, String> tc_hospitalDrugsName;
-            public TableColumn<DrugDTO, String> tc_hospitalDrugsDescription;
-            public TableColumn<DrugDTO, Integer> tc_hospitalDrugsInStock;
-            public TableColumn<DrugDTO, Integer> tc_hospitalDrugsToOrder;
+                public TableColumn<DrugDTO, Boolean> tc_hospitalDrugsCheckBox;
+                public TableColumn<DrugDTO, String> tc_hospitalDrugsName;
+                public TableColumn<DrugDTO, String> tc_hospitalDrugsDescription;
+                public TableColumn<DrugDTO, Integer> tc_hospitalDrugsInStock;
+                public TableColumn<DrugDTO, Integer> tc_hospitalDrugsToOrder;
             public Circle btn_placeOrderBG;
             public SVGPath btn_placeOrderSVG;
         public Label lbl_drugOrders;
+            public TableView<OrderDTO> tv_hospitalOrders;
+                public TableColumn<OrderDTO, String> tc_hospitalOrdersOrderedBy;
+                public TableColumn<OrderDTO, String> tc_hospitalOrdersDelivered;
+                public TableColumn<OrderDTO, String> tc_hospitalOrdersOrderedAt;
+                public TableColumn<OrderDTO, String> tc_hospitalOrdersDeliveredAt;
     
     public AnchorPane changePasswordSidenav;
         public PasswordField tf_changeOldPassword;
@@ -64,6 +72,7 @@ public class UserPageController extends UnicastRemoteObject implements IClientOb
     private boolean isConfirmChangePasswordButtonDisabled;
 
     private transient final ObservableList<DrugDTO> hospitalDrugs = FXCollections.observableArrayList();
+    private transient final ObservableList<OrderDTO> hospitalOrders = FXCollections.observableArrayList();
 
     private static final Logger _logger = LogManager.getLogger();
 
@@ -121,6 +130,7 @@ public class UserPageController extends UnicastRemoteObject implements IClientOb
         btn_placeOrderSVG.setVisible(false);
 
         setupHospitalDrugsTable();
+        setupHospitalOrdersTable();
         updateTables();
     }
 
@@ -132,6 +142,12 @@ public class UserPageController extends UnicastRemoteObject implements IClientOb
         _logger.info("Received available drugs.");
 
         hospitalDrugs.setAll(drugs);
+
+        var orders= service.getOrders();
+
+        _logger.info("Received orders.");
+
+        hospitalOrders.setAll(orders);
 
         _logger.traceExit("Updated tables.");
     }
@@ -157,6 +173,9 @@ public class UserPageController extends UnicastRemoteObject implements IClientOb
             //noinspection rawtypes,unchecked,unchecked
             return new SimpleObjectProperty(checkBox);
         });
+        tc_hospitalDrugsCheckBox.setSortable(false);
+        tc_hospitalDrugsCheckBox.setResizable(false);
+        tc_hospitalDrugsCheckBox.setReorderable(false);
         tc_hospitalDrugsName.setCellValueFactory(new PropertyValueFactory<>("name"));
         tc_hospitalDrugsDescription.setCellValueFactory(new PropertyValueFactory<>("description"));
         tc_hospitalDrugsInStock.setCellValueFactory(new PropertyValueFactory<>("inStock"));
@@ -178,6 +197,29 @@ public class UserPageController extends UnicastRemoteObject implements IClientOb
         });
 
         tv_hospitalDrugs.setItems(hospitalDrugs);
+    }
+
+    private void setupHospitalOrdersTable() {
+        tc_hospitalOrdersOrderedBy.setCellValueFactory(new PropertyValueFactory<>("orderedBy"));
+        tc_hospitalOrdersDelivered.setCellValueFactory(c -> {
+            var property = new SimpleStringProperty();
+            property.setValue(c.getValue().getDelivered() ? "Yes" : "No");
+            return property;
+        });
+        tc_hospitalOrdersOrderedAt.setCellValueFactory(c -> {
+            var property = new SimpleStringProperty();
+            var dateFormat = new SimpleDateFormat("MM/dd/yyyy hh:mm");
+            property.setValue(dateFormat.format(c.getValue().getOrderedAt()));
+            return property;
+        });
+        tc_hospitalOrdersDeliveredAt.setCellValueFactory(c -> {
+            var property = new SimpleStringProperty();
+            var dateFormat = new SimpleDateFormat("MM/dd/yyyy hh:mm");
+            property.setValue(dateFormat.format(c.getValue().getDeliveredAt()));
+            return property;
+        });
+
+        tv_hospitalOrders.setItems(hospitalOrders);
     }
 
     private void updateConfirmAddUserButtonStatus() {
@@ -314,5 +356,19 @@ public class UserPageController extends UnicastRemoteObject implements IClientOb
         } else {
             AlertMessage.showAlert(Alert.AlertType.ERROR, "Order not placed.", "Order not placed.", stage);
         }
+    }
+
+    public void hospitalViewDrugs() {
+        tv_hospitalDrugs.setVisible(true);
+        tv_hospitalOrders.setVisible(false);
+        lbl_availableDrugs.setUnderline(true);
+        lbl_drugOrders.setUnderline(false);
+    }
+
+    public void hospitalViewOrders() {
+        tv_hospitalDrugs.setVisible(false);
+        tv_hospitalOrders.setVisible(true);
+        lbl_availableDrugs.setUnderline(false);
+        lbl_drugOrders.setUnderline(true);
     }
 }
