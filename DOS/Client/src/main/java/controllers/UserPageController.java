@@ -1,12 +1,12 @@
 package controllers;
 
 import domain.dto.DrugDTO;
+import domain.models.Order;
 import domain.models.User;
 import domain.models.UserType;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.SVGPath;
 import service.IClientObserver;
@@ -17,6 +17,7 @@ import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.sql.Date;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.layout.AnchorPane;
@@ -301,7 +302,17 @@ public class UserPageController extends UnicastRemoteObject implements IClientOb
             }
         }
 
-        AlertMessage.showAlert(Alert.AlertType.INFORMATION, "ad", "ad", stage);
-        // TODO: send order
+        var order = new Order(1, user.getId(), false, new Date(System.currentTimeMillis()), null);
+        hospitalDrugs.stream()
+                .filter(DrugDTO::getSelected)
+                .forEach(d -> order.addDrug(d.getId(), d.getToOrder()));
+
+        var result = service.placeOrder(order);
+
+        if (result) {
+            AlertMessage.showAlert(Alert.AlertType.INFORMATION, "Order placed.", "Order placed.", stage);
+        } else {
+            AlertMessage.showAlert(Alert.AlertType.ERROR, "Order not placed.", "Order not placed.", stage);
+        }
     }
 }

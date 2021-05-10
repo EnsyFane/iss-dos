@@ -10,10 +10,14 @@
     <bean id="drugRepo" class="repository.DrugRepository">
         <constructor-arg type="java.lang.String" value="jdbc:sqlite:D:\Facultate\AnII\ISS\iss-dos\DOS.sqlite"/>
     </bean>
+    <bean id="orderRepo" class="repository.OrderRepository">
+        <constructor-arg type="java.lang.String" value="jdbc:sqlite:D:\Facultate\AnII\ISS\iss-dos\DOS.sqlite"/>
+    </bean>
 
     <bean id="appService" class="service.DOSService">
         <constructor-arg ref="userRepo"/>
         <constructor-arg ref="drugRepo"/>
+        <constructor-arg ref="orderRepo"/>
     </bean>
 
     <bean id="serviceExporter" class="org.springframework.remoting.rmi.RmiServiceExporter">

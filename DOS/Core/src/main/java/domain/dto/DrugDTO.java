@@ -3,18 +3,28 @@ package domain.dto;
 import java.io.Serializable;
 
 public class DrugDTO implements Serializable {
+    private Integer id;
     private Boolean selected;
     private String name;
     private String description;
     private Integer inStock;
     private Integer toOrder;
 
-    public DrugDTO(Boolean selected, String name, String description, Integer inStock, Integer toOrder) {
+    public DrugDTO(Integer id, Boolean selected, String name, String description, Integer inStock, Integer toOrder) {
+        this.id = id;
         this.selected = selected;
         this.name = name;
         this.description = description;
         this.inStock = inStock;
         this.toOrder = toOrder;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public Boolean getSelected() {

@@ -2,11 +2,12 @@ package service;
 
 import domain.dto.DrugDTO;
 import domain.dto.UserDTO;
-import domain.models.Drug;
+import domain.models.Order;
 import domain.models.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import repository.IDrugRepository;
+import repository.IOrderRepository;
 import repository.IUserRepository;
 import utils.Constants;
 import utils.PasswordUtils;
@@ -20,16 +21,18 @@ import java.util.stream.Collectors;
 public class DOSService implements IDOSService {
     private final IUserRepository userRepo;
     private final IDrugRepository drugRepo;
+    private final IOrderRepository orderRepo;
 
     private final Map<String, IClientObserver> loggedClients;
 
     private static final Logger _logger = LogManager.getLogger();
 
-    public DOSService(IUserRepository userRepo, IDrugRepository drugRepo) {
+    public DOSService(IUserRepository userRepo, IDrugRepository drugRepo, IOrderRepository orderRepo) {
         _logger.info("Initializing DOS Service.");
 
         this.userRepo = userRepo;
         this.drugRepo = drugRepo;
+        this.orderRepo = orderRepo;
 
         loggedClients = new ConcurrentHashMap<>();
     }
@@ -140,11 +143,30 @@ public class DOSService implements IDOSService {
         var drugs = drugRepo.getAvailableDrugs();
         var converted = drugs
                 .stream()
-                .map(d -> new DrugDTO(false, d.getName(), d.getDescription(), d.getInStock(), 0))
+                .map(d -> new DrugDTO(d.getId(),false, d.getName(), d.getDescription(), d.getInStock(), 0))
                 .collect(Collectors.toList());
 
         _logger.traceExit("Got {} drugs.", drugs.size());
 
         return converted;
+    }
+
+    @Override
+    public boolean placeOrder(Order order) {
+        _logger.traceEntry("Placing order. {}", order);
+
+        if (order.getDeliveredAt() == null) {
+            order.setDeliveredAt(new Date(System.currentTimeMillis() + Constants.DEFAULT_DRUG_DELIVERY_ETA));
+        }
+
+        var result = orderRepo.placeOrder(order);
+
+        if (result.isEmpty()) {
+            _logger.traceExit("Order placed.");
+        } else {
+            _logger.traceExit("Order not placed.");
+        }
+
+        return result.isEmpty();
     }
 }
