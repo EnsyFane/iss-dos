@@ -31,16 +31,21 @@ public class OrderRepository implements IOrderRepository {
     }
 
     @Override
-    public void placeOrder(Order order) {
+    public Optional<Order> placeOrder(Order order) {
         _logger.traceEntry("Placing order.");
 
-        add(order);
+        var result = add(order);
 
-        for (var details : order.getDrugs().keySet()) {
-            addOrderDetails(order.getId(), details, order.getDrugs().get(details));
+        if (result.isEmpty()) {
+            for (var details : order.getDrugs().keySet()) {
+                addOrderDetails(order.getId(), details, order.getDrugs().get(details));
+            }
+            _logger.traceExit("Order placed.");
+        } else {
+            _logger.traceExit("Order not placed.");
         }
 
-        _logger.traceExit("Order placed.");
+        return result;
     }
 
     private void addOrderDetails(Integer orderId, Integer drugId, Integer quality) {

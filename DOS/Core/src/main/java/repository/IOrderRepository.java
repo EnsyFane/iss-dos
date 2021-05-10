@@ -2,6 +2,8 @@ package repository;
 
 import domain.models.Order;
 
+import java.util.Optional;
+
 public interface IOrderRepository extends IRepository<Integer, Order> {
-    void placeOrder(Order order);
+    Optional<Order> placeOrder(Order order);
 }

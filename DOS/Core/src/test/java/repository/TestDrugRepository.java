@@ -109,13 +109,15 @@ public class TestDrugRepository {
 
     @Test
     public void DrugRepoWithMultipleDrugs_GetAvailableDrugs_ReturnsOnlyAvailableDrugs() {
-        var availableDrugs = addDrugsToRepo(5);
+        addDrugsToRepo(5);
         var unavailableDrug = new Drug.Builder().withInStock(0).build();
         _drugRepo.add(unavailableDrug);
 
-        var actualDrugs = _drugRepo.getAvailableDrugs();
+        var actualDrugs = _drugRepo.getAll();
+        var actualAvailableDrugs = _drugRepo.getAvailableDrugs();
 
-        assertEquals(5, actualDrugs.size());
+        assertEquals(6, actualDrugs.size());
+        assertEquals(5, actualAvailableDrugs.size());
     }
 
     @Test
