@@ -8,6 +8,7 @@ import domain.models.Order;
 import domain.models.User;
 
 import java.util.List;
+import java.util.Map;
 
 public interface IDOSService {
     User loginUser(UserDTO loginDetails, IClientObserver client) throws ServerException;
@@ -29,4 +30,6 @@ public interface IDOSService {
     void completeOrder(Integer orderId);
 
     void cancelOrder(Integer orderId);
+
+    Order getOrderById(Integer orderId);
 }

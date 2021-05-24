@@ -10,10 +10,7 @@ import utils.JdbcUtils;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Properties;
+import java.util.*;
 
 public class OrderRepository implements IOrderRepository {
     private final JdbcUtils dbUtils;
@@ -47,6 +44,7 @@ public class OrderRepository implements IOrderRepository {
 
         return result;
     }
+
 
     private void addOrderDetails(Integer orderId, Integer drugId, Integer quality) {
         var con = dbUtils.getConnection();

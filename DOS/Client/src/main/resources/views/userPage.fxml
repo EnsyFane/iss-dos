@@ -318,4 +318,43 @@
         </Label>
     </AnchorPane>
 
+<!--    change password sidenav-->
+    <AnchorPane fx:id="orderDetailsSidenav" prefHeight="850.0" prefWidth="1200.0" visible="false">
+    <!--        black overlay-->
+        <Rectangle fill="#000000b0" height="858.0" onMouseClicked="#handleCloseOrderDetails" width="1200.0" />
+    <!--        white box-->
+        <Rectangle fill="#ffffff" height="850.0" layoutX="770.0" width="430.0" />
+    <!--        header-->
+        <Rectangle fill="#8b8b8b" height="82.0" layoutX="770.0" width="430.0" />
+        <Label layoutX="903.0" layoutY="28.0" text="Order details" textAlignment="CENTER" textFill="WHITE">
+            <font>
+                <Font name="Sylfaen" size="20.0" />
+            </font>
+        </Label>
+
+    <!--        fields-->
+        <Label layoutX="800.0" layoutY="160.0" text="Drugs:" textAlignment="CENTER" textFill="BLACK">
+            <font>
+                <Font name="Sylfaen" size="20.0" />
+            </font>
+        </Label>
+        <TextArea fx:id="tx_drugs" editable="false" layoutX="800.0" layoutY="186.0" prefHeight="200.0" prefWidth="373.0" />
+
+        <!--        cancel button-->
+        <Rectangle fill="#8b8b8b" height="82.0" layoutX="770.0" layoutY="776.0" onMouseClicked="#handleCloseOrderDetails" stroke="#707070" strokeType="INSIDE" width="215.0" />
+        <Label layoutX="849.0" layoutY="804.0" onMouseClicked="#handleCloseOrderDetails" text="Close" textAlignment="CENTER" textFill="BLACK">
+            <font>
+                <Font name="Sylfaen" size="20.0" />
+            </font>
+        </Label>
+
+        <!--        add button-->
+        <Rectangle fx:id="btn_completeOrder" fill="#8b8b8b" height="82.0" layoutX="985.0" layoutY="776.0" onMouseClicked="#handleCompleteOrder" stroke="#707070" strokeType="INSIDE" width="215.0" />
+        <Label layoutX="1061.0" layoutY="804.0" onMouseClicked="#handleCompleteOrder" text="Complete" textAlignment="CENTER" textFill="BLACK">
+            <font>
+                <Font name="Sylfaen" size="20.0" />
+            </font>
+        </Label>
+    </AnchorPane>
+
 </AnchorPane>

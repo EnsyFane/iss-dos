@@ -11,7 +11,6 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseButton;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.SVGPath;
 import service.IClientObserver;
@@ -83,9 +82,14 @@ public class UserPageController extends UnicastRemoteObject implements IClientOb
         public Rectangle btn_changePassword;
         public Rectangle btn_confirmUpdateUser;
 
+    public AnchorPane orderDetailsSidenav;
+        public TextArea tx_drugs;
+        public Rectangle btn_completeOrder;
+
     private IDOSService service;
     private Stage stage;
     private User user;
+    private Integer orderId;
 
     private boolean isConfirmAddUserButtonDisabled;
     private boolean isConfirmChangePasswordButtonDisabled;
@@ -249,7 +253,7 @@ public class UserPageController extends UnicastRemoteObject implements IClientOb
                 var response = AlertMessage.showAlert(Alert.AlertType.CONFIRMATION, "Cancel order.", "Are you sure you want to cancel the order?", stage, ButtonType.YES, ButtonType.NO);
 
                 if (response.isPresent() && response.get() == ButtonType.YES) {
-                    service.cancelOrder(selectedOrder.getId());
+                    service.cancelOrder(orderId);
                 }
 
                 updateTables();
@@ -275,13 +279,15 @@ public class UserPageController extends UnicastRemoteObject implements IClientOb
                     return;
                 }
 
-                var response = AlertMessage.showAlert(Alert.AlertType.CONFIRMATION, "Complete order.", "Are you sure you want to complete the order?", stage, ButtonType.YES, ButtonType.NO);
-
-                if (response.isPresent() && response.get() == ButtonType.YES) {
-                    service.completeOrder(selectedOrder.getId());
+                StringBuilder orderDetails = new StringBuilder();
+                var drugs = service.getOrderById(selectedOrder.getId());
+                for (var d : drugs.getDrugs().keySet()) {
+                    orderDetails.append(drugs.getDrugs().get(d)).append(" x Drug with id: ").append(d).append("\n");
                 }
+                tx_drugs.setText(orderDetails.toString());
+                orderId = selectedOrder.getId();
 
-                updateTables();
+                orderDetailsSidenav.setVisible(true);
             }
         });
     }
@@ -452,6 +458,8 @@ public class UserPageController extends UnicastRemoteObject implements IClientOb
         } else {
             AlertMessage.showAlert(Alert.AlertType.ERROR, "Order not placed.", "Order not placed.", stage);
         }
+
+        updateTables();
     }
 
     public void hospitalViewDrugs() {
@@ -525,5 +533,22 @@ public class UserPageController extends UnicastRemoteObject implements IClientOb
             user.setEmail(oldEmail);
             AlertMessage.showAlert(Alert.AlertType.ERROR, "User not updated.", ex.getMessage(), stage);
         }
+    }
+
+    public void handleCloseOrderDetails() {
+        tx_drugs.setText("");
+
+        orderDetailsSidenav.setVisible(false);
+    }
+
+    public void handleCompleteOrder() {
+        var response = AlertMessage.showAlert(Alert.AlertType.CONFIRMATION, "Complete order.", "Are you sure you want to complete the order?", stage, ButtonType.YES, ButtonType.NO);
+
+        if (response.isPresent() && response.get() == ButtonType.YES) {
+            service.completeOrder(orderId);
+        }
+
+        updateTables();
+        handleCloseOrderDetails();
     }
 }

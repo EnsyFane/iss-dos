@@ -3,6 +3,7 @@ package service;
 import domain.dto.DrugDTO;
 import domain.dto.OrderDTO;
 import domain.dto.UserDTO;
+import domain.models.Drug;
 import domain.models.Order;
 import domain.models.User;
 import org.apache.logging.log4j.LogManager;
@@ -14,6 +15,7 @@ import utils.Constants;
 import utils.PasswordUtils;
 
 import java.sql.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -217,5 +219,12 @@ public class DOSService implements IDOSService {
     @Override
     public void cancelOrder(Integer orderId) {
         orderRepo.remove(orderId);
+    }
+
+    @Override
+    public Order getOrderById(Integer orderId) {
+        var order = orderRepo.getById(orderId);
+
+        return order.orElse(null);
     }
 }
