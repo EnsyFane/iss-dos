@@ -35,7 +35,7 @@ public class UserValidator extends AbstractValidator<Integer, User> {
         }
         if (entity.getSalt().length() != Constants.SALT_LENGTH)
         {
-            message += "Buyer name property must be " + Constants.SALT_LENGTH + " characters long.\n";
+            message += "Salt property must be " + Constants.SALT_LENGTH + " characters long.\n";
         }
         var matcher = pattern.matcher(entity.getEmail());
         if (!matcher.matches()) {

@@ -23,4 +23,10 @@ public interface IDOSService {
     boolean placeOrder(Order order);
 
     List<OrderDTO> getOrders();
+
+    boolean updateUser(User updatedUser);
+
+    void completeOrder(Integer orderId);
+
+    void cancelOrder(Integer orderId);
 }

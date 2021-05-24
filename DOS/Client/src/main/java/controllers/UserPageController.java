@@ -5,10 +5,13 @@ import domain.dto.OrderDTO;
 import domain.models.Order;
 import domain.models.User;
 import domain.models.UserType;
+import domain.validation.ValidationException;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.SVGPath;
 import service.IClientObserver;
@@ -41,6 +44,12 @@ public class UserPageController extends UnicastRemoteObject implements IClientOb
             public Rectangle btn_confirmAddUser;
 
     public AnchorPane pharmacyLayout;
+        public TableView<OrderDTO> tv_pharmacyOrders;
+        public TableColumn<OrderDTO, String> tc_pharmacyOrdersOrderedBy;
+        public TableColumn<OrderDTO, String> tc_pharmacyOrdersDelivered;
+        public TableColumn<OrderDTO, String> tc_pharmacyOrdersOrderedAt;
+        public TableColumn<OrderDTO, String> tc_pharmacyOrdersDeliveredAt;
+
     public AnchorPane hospitalLayout;
         public Label lbl_availableDrugs;
             public TableView<DrugDTO> tv_hospitalDrugs;
@@ -64,15 +73,27 @@ public class UserPageController extends UnicastRemoteObject implements IClientOb
         public PasswordField tf_changeConfirmPassword;
         public Rectangle btn_confirmChangePassword;
 
+    public AnchorPane updateUserSidenav;
+        public TextField tf_updateUserName;
+        public TextField tf_updateFirstName;
+        public TextField tf_updateLastName;
+        public PasswordField tf_updatePassword;
+        public TextField tf_updateUserType;
+        public TextField tf_updateEmail;
+        public Rectangle btn_changePassword;
+        public Rectangle btn_confirmUpdateUser;
+
     private IDOSService service;
     private Stage stage;
     private User user;
 
     private boolean isConfirmAddUserButtonDisabled;
     private boolean isConfirmChangePasswordButtonDisabled;
+    private boolean isConfirmUpdateUserButtonDisabled;
 
     private transient final ObservableList<DrugDTO> hospitalDrugs = FXCollections.observableArrayList();
     private transient final ObservableList<OrderDTO> hospitalOrders = FXCollections.observableArrayList();
+    private transient final ObservableList<OrderDTO> pharmacyOrders = FXCollections.observableArrayList();
 
     private static final Logger _logger = LogManager.getLogger();
 
@@ -120,6 +141,12 @@ public class UserPageController extends UnicastRemoteObject implements IClientOb
         tf_changeConfirmPassword.textProperty().addListener(tx -> updateConfirmChangePasswordButtonStatus());
         updateConfirmChangePasswordButtonStatus();
 
+        tf_updateUserName.textProperty().addListener(tx -> updateConfirmUpdateUserButtonStatus());
+        tf_updateFirstName.textProperty().addListener(tx -> updateConfirmUpdateUserButtonStatus());
+        tf_updateLastName.textProperty().addListener(tx -> updateConfirmUpdateUserButtonStatus());
+        tf_updateEmail.textProperty().addListener(tx -> updateConfirmUpdateUserButtonStatus());
+        updateConfirmUpdateUserButtonStatus();
+
         ObservableList<String> userTypes = FXCollections.observableArrayList();
         userTypes.add(UserType.Admin.toString());
         userTypes.add(UserType.PharmacyStaff.toString());
@@ -131,6 +158,7 @@ public class UserPageController extends UnicastRemoteObject implements IClientOb
 
         setupHospitalDrugsTable();
         setupHospitalOrdersTable();
+        setupPharmacyOrdersTable();
         updateTables();
     }
 
@@ -148,6 +176,7 @@ public class UserPageController extends UnicastRemoteObject implements IClientOb
         _logger.info("Received orders.");
 
         hospitalOrders.setAll(orders);
+        pharmacyOrders.setAll(orders);
 
         _logger.traceExit("Updated tables.");
     }
@@ -200,6 +229,64 @@ public class UserPageController extends UnicastRemoteObject implements IClientOb
     }
 
     private void setupHospitalOrdersTable() {
+        setupOrdersTable(tc_hospitalOrdersOrderedBy, tc_hospitalOrdersDelivered, tc_hospitalOrdersOrderedAt, tc_hospitalOrdersDeliveredAt, tv_hospitalOrders);
+
+        tv_hospitalOrders.setOnMouseClicked((var event) -> {
+            if (event.getButton().equals(MouseButton.PRIMARY) && event.getClickCount() == 2) {
+                _logger.traceEntry("Double clicked table cell.");
+
+                var selectedOrder = tv_hospitalOrders.getSelectionModel().getSelectedItem();
+                if (selectedOrder == null) {
+                    _logger.traceExit("No order selected.");
+
+                    return;
+                }
+
+                if (selectedOrder.getDelivered()) {
+                    return;
+                }
+
+                var response = AlertMessage.showAlert(Alert.AlertType.CONFIRMATION, "Cancel order.", "Are you sure you want to cancel the order?", stage, ButtonType.YES, ButtonType.NO);
+
+                if (response.isPresent() && response.get() == ButtonType.YES) {
+                    service.cancelOrder(selectedOrder.getId());
+                }
+
+                updateTables();
+            }
+        });
+    }
+
+    private void setupPharmacyOrdersTable() {
+        setupOrdersTable(tc_pharmacyOrdersOrderedBy, tc_pharmacyOrdersDelivered, tc_pharmacyOrdersOrderedAt, tc_pharmacyOrdersDeliveredAt, tv_pharmacyOrders);
+
+        tv_pharmacyOrders.setOnMouseClicked((var event) -> {
+            if (event.getButton().equals(MouseButton.PRIMARY) && event.getClickCount() == 2) {
+                _logger.traceEntry("Double clicked table cell.");
+
+                var selectedOrder = tv_pharmacyOrders.getSelectionModel().getSelectedItem();
+                if (selectedOrder == null) {
+                    _logger.traceExit("No order selected.");
+
+                    return;
+                }
+
+                if (selectedOrder.getDelivered()) {
+                    return;
+                }
+
+                var response = AlertMessage.showAlert(Alert.AlertType.CONFIRMATION, "Complete order.", "Are you sure you want to complete the order?", stage, ButtonType.YES, ButtonType.NO);
+
+                if (response.isPresent() && response.get() == ButtonType.YES) {
+                    service.completeOrder(selectedOrder.getId());
+                }
+
+                updateTables();
+            }
+        });
+    }
+
+    private void setupOrdersTable(TableColumn<OrderDTO, String> tc_hospitalOrdersOrderedBy, TableColumn<OrderDTO, String> tc_hospitalOrdersDelivered, TableColumn<OrderDTO, String> tc_hospitalOrdersOrderedAt, TableColumn<OrderDTO, String> tc_hospitalOrdersDeliveredAt, TableView<OrderDTO> tv_hospitalOrders) {
         tc_hospitalOrdersOrderedBy.setCellValueFactory(new PropertyValueFactory<>("orderedBy"));
         tc_hospitalOrdersDelivered.setCellValueFactory(c -> {
             var property = new SimpleStringProperty();
@@ -240,6 +327,15 @@ public class UserPageController extends UnicastRemoteObject implements IClientOb
         shouldDisableButton |= tf_changeNewPassword.getText().equals(tf_changeOldPassword.getText());
 
         isConfirmChangePasswordButtonDisabled = shouldDisableButton;
+    }
+
+    private void updateConfirmUpdateUserButtonStatus() {
+        var shouldDisableButton = tf_updateUserName.getText().isEmpty();
+        shouldDisableButton |= tf_updateFirstName.getText().isEmpty();
+        shouldDisableButton |= tf_updateLastName.getText().isEmpty();
+        shouldDisableButton |= tf_updateEmail.getText().isEmpty();
+
+        isConfirmUpdateUserButtonDisabled = shouldDisableButton;
     }
 
     public void handleCancelAddUser() {
@@ -370,5 +466,64 @@ public class UserPageController extends UnicastRemoteObject implements IClientOb
         tv_hospitalOrders.setVisible(true);
         lbl_availableDrugs.setUnderline(false);
         lbl_drugOrders.setUnderline(true);
+    }
+
+    public void handleUpdateUser() {
+        tf_updateUserName.requestFocus();
+
+        tf_updateUserName.setText(user.getUserName());
+        tf_updateFirstName.setText(user.getFirstName());
+        tf_updateLastName.setText(user.getLastName());
+        tf_updateUserType.setText(user.getUserType().toString());
+        tf_updatePassword.setText(user.getEncryptedPassword());
+        tf_updateEmail.setText(user.getEmail());
+
+        tf_updateUserType.setDisable(true);
+        tf_updatePassword.setDisable(true);
+
+        updateUserSidenav.setVisible(true);
+    }
+
+    public void handleCancelUpdateUser() {
+        tf_updateUserName.setText("");
+        tf_updateFirstName.setText("");
+        tf_updateLastName.setText("");
+        tf_updatePassword.setText("");
+        tf_updateEmail.setText("");
+        tf_updateUserType.setText("");
+
+        updateUserSidenav.setVisible(false);
+    }
+
+    public void handleConfirmUpdateUser() {
+        if (isConfirmUpdateUserButtonDisabled) {
+            return;
+        }
+
+        var oldUserName = user.getUserName();
+        var oldFirstName = user.getFirstName();
+        var oldLastName = user.getLastName();
+        var oldEmail = user.getEmail();
+
+        user.setUserName(tf_updateUserName.getText());
+        user.setFirstName(tf_updateFirstName.getText());
+        user.setLastName(tf_updateLastName.getText());
+        user.setEmail(tf_updateEmail.getText());
+
+        try {
+            var response = service.updateUser(user);
+            if (response) {
+                AlertMessage.showAlert(Alert.AlertType.INFORMATION, "User updated", "User updated.", stage);
+                handleCancelUpdateUser();
+            } else {
+                AlertMessage.showAlert(Alert.AlertType.ERROR, "User not updated.", "User could not be updated.", stage);
+            }
+        } catch (ValidationException ex) {
+            user.setUserName(oldUserName);
+            user.setFirstName(oldFirstName);
+            user.setLastName(oldLastName);
+            user.setEmail(oldEmail);
+            AlertMessage.showAlert(Alert.AlertType.ERROR, "User not updated.", ex.getMessage(), stage);
+        }
     }
 }

@@ -4,16 +4,26 @@ import java.io.Serializable;
 import java.sql.Date;
 
 public class OrderDTO implements Serializable {
+    private Integer id;
     private String orderedBy;
     private Boolean delivered;
     private Date orderedAt;
     private Date deliveredAt;
 
-    public OrderDTO(String orderedBy, Boolean delivered, Date orderedAt, Date deliveredAt) {
+    public OrderDTO(Integer id, String orderedBy, Boolean delivered, Date orderedAt, Date deliveredAt) {
+        this.id = id;
         this.orderedBy = orderedBy;
         this.delivered = delivered;
         this.orderedAt = orderedAt;
         this.deliveredAt = deliveredAt;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getOrderedBy() {

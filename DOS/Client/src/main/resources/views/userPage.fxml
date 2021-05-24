@@ -15,6 +15,7 @@
                 <Font name="Sylfaen" size="20.0" />
             </font>
         </Label>
+        <SVGPath content="M30,29.789a6.791,6.791,0,0,1-1.465,4.383A4.39,4.39,0,0,1,25.008,36H4.992a4.388,4.388,0,0,1-3.527-1.828A6.8,6.8,0,0,1,0,29.789a33.719,33.719,0,0,1,.2-3.762,20.2,20.2,0,0,1,.738-3.563,11.854,11.854,0,0,1,1.371-3.07,6.566,6.566,0,0,1,2.2-2.086A6.08,6.08,0,0,1,7.664,16.5,10.129,10.129,0,0,0,15,19.5a10.129,10.129,0,0,0,7.336-3,6.085,6.085,0,0,1,3.152.809,6.566,6.566,0,0,1,2.2,2.086,11.854,11.854,0,0,1,1.371,3.07,20.2,20.2,0,0,1,.738,3.563A33.718,33.718,0,0,1,30,29.79ZM24,9a8.669,8.669,0,0,1-2.637,6.363A8.676,8.676,0,0,1,15,18a8.666,8.666,0,0,1-6.363-2.637A8.673,8.673,0,0,1,6,9,8.673,8.673,0,0,1,8.637,2.637,8.666,8.666,0,0,1,15,0a8.676,8.676,0,0,1,6.363,2.637A8.669,8.669,0,0,1,24,9Z" fill="WHITE" layoutX="1135.0" layoutY="22.0" onMouseClicked="#handleUpdateUser" />
 <!--        sub header-->
         <Rectangle fill="#d8d8d8" height="82.0" layoutY="82" width="1200.0" />
         <Label layoutX="581.0" layoutY="110.0" text="Staff" textAlignment="CENTER" textFill="BLACK">
@@ -31,6 +32,29 @@
 
 <!--    pharmacy layout-->
     <AnchorPane fx:id="pharmacyLayout" prefHeight="850.0" prefWidth="1200.0" visible="false">
+<!--        header-->
+        <Rectangle fill="#8b8b8b" height="82.0" width="1200.0" />
+        <Label layoutX="484.0" layoutY="28.0" text="D.O.S - Pharmacy Terminal" textAlignment="CENTER" textFill="WHITE">
+            <font>
+                <Font name="Sylfaen" size="20.0" />
+            </font>
+        </Label>
+        <SVGPath content="M30,29.789a6.791,6.791,0,0,1-1.465,4.383A4.39,4.39,0,0,1,25.008,36H4.992a4.388,4.388,0,0,1-3.527-1.828A6.8,6.8,0,0,1,0,29.789a33.719,33.719,0,0,1,.2-3.762,20.2,20.2,0,0,1,.738-3.563,11.854,11.854,0,0,1,1.371-3.07,6.566,6.566,0,0,1,2.2-2.086A6.08,6.08,0,0,1,7.664,16.5,10.129,10.129,0,0,0,15,19.5a10.129,10.129,0,0,0,7.336-3,6.085,6.085,0,0,1,3.152.809,6.566,6.566,0,0,1,2.2,2.086,11.854,11.854,0,0,1,1.371,3.07,20.2,20.2,0,0,1,.738,3.563A33.718,33.718,0,0,1,30,29.79ZM24,9a8.669,8.669,0,0,1-2.637,6.363A8.676,8.676,0,0,1,15,18a8.666,8.666,0,0,1-6.363-2.637A8.673,8.673,0,0,1,6,9,8.673,8.673,0,0,1,8.637,2.637,8.666,8.666,0,0,1,15,0a8.676,8.676,0,0,1,6.363,2.637A8.669,8.669,0,0,1,24,9Z" fill="WHITE" layoutX="1135.0" layoutY="22.0" onMouseClicked="#handleUpdateUser" />
+<!--        sub header-->
+        <Rectangle fill="#d8d8d8" height="82.0" layoutY="82" width="1200.0" />
+        <Label layoutX="548.0" layoutY="110.0" text="Drug Orders" textAlignment="CENTER" textFill="BLACK">
+            <font>
+                <Font name="Sylfaen" size="20.0" />
+            </font>
+        </Label>
+        <TableView fx:id="tv_pharmacyOrders" focusTraversable="false" layoutY="164.0" prefHeight="695.0" prefWidth="1200.0" stylesheets="@../css/table.css">
+            <columns>
+                <TableColumn fx:id="tc_pharmacyOrdersOrderedBy" prefWidth="299.5" text="Ordered By" />
+                <TableColumn fx:id="tc_pharmacyOrdersDelivered" prefWidth="299.5" text="Delivered" />
+                <TableColumn fx:id="tc_pharmacyOrdersOrderedAt" prefWidth="299.5" text="Ordered At" />
+                <TableColumn fx:id="tc_pharmacyOrdersDeliveredAt" prefWidth="299.5" text="Delivered At" />
+            </columns>
+        </TableView>
     </AnchorPane>
 
 <!--    hospital layout-->
@@ -42,15 +66,16 @@
                 <Font name="Sylfaen" size="20.0" />
             </font>
         </Label>
+        <SVGPath content="M30,29.789a6.791,6.791,0,0,1-1.465,4.383A4.39,4.39,0,0,1,25.008,36H4.992a4.388,4.388,0,0,1-3.527-1.828A6.8,6.8,0,0,1,0,29.789a33.719,33.719,0,0,1,.2-3.762,20.2,20.2,0,0,1,.738-3.563,11.854,11.854,0,0,1,1.371-3.07,6.566,6.566,0,0,1,2.2-2.086A6.08,6.08,0,0,1,7.664,16.5,10.129,10.129,0,0,0,15,19.5a10.129,10.129,0,0,0,7.336-3,6.085,6.085,0,0,1,3.152.809,6.566,6.566,0,0,1,2.2,2.086,11.854,11.854,0,0,1,1.371,3.07,20.2,20.2,0,0,1,.738,3.563A33.718,33.718,0,0,1,30,29.79ZM24,9a8.669,8.669,0,0,1-2.637,6.363A8.676,8.676,0,0,1,15,18a8.666,8.666,0,0,1-6.363-2.637A8.673,8.673,0,0,1,6,9,8.673,8.673,0,0,1,8.637,2.637,8.666,8.666,0,0,1,15,0a8.676,8.676,0,0,1,6.363,2.637A8.669,8.669,0,0,1,24,9Z" fill="WHITE" layoutX="1135.0" layoutY="22.0" onMouseClicked="#handleUpdateUser" />
 <!--        sub header left-->
-        <Rectangle fill="#d8d8d8" height="82.0" layoutY="82" width="600.0" onMouseClicked="#hospitalViewDrugs" />
+        <Rectangle fill="#d8d8d8" height="82.0" layoutY="82" onMouseClicked="#hospitalViewDrugs" width="600.0" />
         <Label fx:id="lbl_availableDrugs" layoutX="233.0" layoutY="110.0" onMouseClicked="#hospitalViewDrugs" text="Available Drugs" textAlignment="CENTER" textFill="BLACK" underline="true">
             <font>
                 <Font name="Sylfaen" size="20.0" />
             </font>
         </Label>
 <!--        sub header right-->
-        <Rectangle fill="#d8d8d8" height="82.0" layoutX="600" layoutY="82" width="600.0" onMouseClicked="#hospitalViewOrders" />
+        <Rectangle fill="#d8d8d8" height="82.0" layoutX="600" layoutY="82" onMouseClicked="#hospitalViewOrders" width="600.0" />
         <Label fx:id="lbl_drugOrders" layoutX="848.0" layoutY="110.0" onMouseClicked="#hospitalViewOrders" text="Drug Orders" textAlignment="CENTER" textFill="BLACK">
             <font>
                 <Font name="Sylfaen" size="20.0" />
@@ -67,7 +92,7 @@
             </columns>
         </TableView>
 
-        <TableView visible="false" fx:id="tv_hospitalOrders" focusTraversable="false" layoutY="164.0" prefHeight="695.0" prefWidth="1200.0" stylesheets="@../css/table.css">
+        <TableView fx:id="tv_hospitalOrders" focusTraversable="false" layoutY="164.0" prefHeight="695.0" prefWidth="1195.0" stylesheets="@../css/table.css" visible="false">
             <columns>
                 <TableColumn fx:id="tc_hospitalOrdersOrderedBy" prefWidth="299.5" text="Ordered By" />
                 <TableColumn fx:id="tc_hospitalOrdersDelivered" prefWidth="299.5" text="Delivered" />
@@ -81,6 +106,88 @@
 <!--        arrow icon-->
         <SVGPath fx:id="btn_placeOrderSVG" content="M25.078-20.926v-2.217a2.336,2.336,0,0,0-.554-1.567,1.8,1.8,0,0,0-1.44-.65H11.091l4.991-5.092a2.075,2.075,0,0,0,.647-1.559,2.075,2.075,0,0,0-.647-1.559L14.8-34.887a2.07,2.07,0,0,0-1.533-.641,2.161,2.161,0,0,0-1.55.641L.631-23.594A2.14,2.14,0,0,0,0-22.035a2.236,2.236,0,0,0,.631,1.576L11.721-9.2a2.1,2.1,0,0,0,1.55.658A2.079,2.079,0,0,0,14.8-9.2l1.278-1.282a2.168,2.168,0,0,0,.647-1.576,2.168,2.168,0,0,0-.647-1.576l-4.992-5.076H23.084a1.8,1.8,0,0,0,1.439-.65A2.339,2.339,0,0,0,25.078-20.926Z" fill="WHITE" layoutX="1074.0" layoutY="779.0" onMouseClicked="#handleSendOrder" rotate="180.0" />
 
+    </AnchorPane>
+
+<!--    update user sidenav-->
+    <AnchorPane fx:id="updateUserSidenav" prefHeight="850.0" prefWidth="1200.0" visible="false">
+        <!--        black overlay-->
+        <Rectangle fill="#000000b0" height="858.0" onMouseClicked="#handleCancelUpdateUser" width="1200.0" />
+        <!--        white box-->
+        <Rectangle fill="#ffffff" height="850.0" layoutX="770.0" width="430.0" />
+
+        <!--        fields-->
+        <Label layoutX="813.0" layoutY="160.0" text="User Name" textAlignment="CENTER" textFill="BLACK">
+            <font>
+                <Font name="Sylfaen" size="20.0" />
+            </font>
+        </Label>
+        <TextField fx:id="tf_updateUserName" layoutX="920.5" layoutY="160.0" prefWidth="241.0" />
+
+        <Label layoutX="813.0" layoutY="212.0" text="First Name" textAlignment="CENTER" textFill="BLACK">
+            <font>
+                <Font name="Sylfaen" size="20.0" />
+            </font>
+        </Label>
+        <TextField fx:id="tf_updateFirstName" layoutX="920.5" layoutY="212.0" prefWidth="241.0" />
+
+        <Label layoutX="813.0" layoutY="264.0" text="Last Name" textAlignment="CENTER" textFill="BLACK">
+            <font>
+                <Font name="Sylfaen" size="20.0" />
+            </font>
+        </Label>
+        <TextField fx:id="tf_updateLastName" layoutX="920.5" layoutY="264.0" prefWidth="241.0" />
+
+        <Label layoutX="813.0" layoutY="316.0" text="Password" textAlignment="CENTER" textFill="BLACK">
+            <font>
+                <Font name="Sylfaen" size="20.0" />
+            </font>
+        </Label>
+        <PasswordField fx:id="tf_updatePassword" layoutX="920.5" layoutY="316.0" prefHeight="25.0" prefWidth="241.0" />
+
+        <Label layoutX="813.0" layoutY="368.0" text="User Type" textAlignment="CENTER" textFill="BLACK">
+            <font>
+                <Font name="Sylfaen" size="20.0" />
+            </font>
+        </Label>
+        <TextField fx:id="tf_updateUserType" layoutX="920.5" layoutY="368.0" prefWidth="241.0" />
+
+        <Label layoutX="813.0" layoutY="420.0" text="E-Mail" textAlignment="CENTER" textFill="BLACK">
+            <font>
+                <Font name="Sylfaen" size="20.0" />
+            </font>
+        </Label>
+        <TextField fx:id="tf_updateEmail" layoutX="920.5" layoutY="420.0" prefWidth="241.0" />
+
+        <!--        header-->
+        <Rectangle fill="#8b8b8b" height="82.0" layoutX="770.0" width="430.0" />
+        <Label layoutX="932.0" layoutY="28.0" text="Update Profile" textAlignment="CENTER" textFill="WHITE">
+            <font>
+                <Font name="Sylfaen" size="20.0" />
+            </font>
+        </Label>
+
+        <Rectangle fx:id="btn_changePassword" fill="#8b8b8b" height="82.0" layoutX="770.0" layoutY="694.0" onMouseClicked="#handleChangePassword" stroke="#707070" strokeType="INSIDE" width="430.0" />
+        <Label layoutX="912.0" layoutY="722.0" onMouseClicked="#handleChangePassword" text="Change password" textAlignment="CENTER" textFill="BLACK">
+            <font>
+                <Font name="Sylfaen" size="20.0" />
+            </font>
+        </Label>
+
+        <!--        cancel button-->
+        <Rectangle fill="#8b8b8b" height="82.0" layoutX="770.0" layoutY="776.0" onMouseClicked="#handleCancelUpdateUser" stroke="#707070" strokeType="INSIDE" width="215.0" />
+        <Label layoutX="849.0" layoutY="804.0" onMouseClicked="#handleCancelUpdateUser" text="Cancel" textAlignment="CENTER" textFill="BLACK">
+            <font>
+                <Font name="Sylfaen" size="20.0" />
+            </font>
+        </Label>
+
+        <!--        update button-->
+        <Rectangle fx:id="btn_confirmUpdateUser" fill="#8b8b8b" height="82.0" layoutX="985.0" layoutY="776.0" onMouseClicked="#handleConfirmUpdateUser" stroke="#707070" strokeType="INSIDE" width="215.0" />
+        <Label layoutX="1075.0" layoutY="804.0" onMouseClicked="#handleConfirmUpdateUser" text="Update" textAlignment="CENTER" textFill="BLACK">
+            <font>
+                <Font name="Sylfaen" size="20.0" />
+            </font>
+        </Label>
     </AnchorPane>
 
 <!--    add user sidenav-->
@@ -210,4 +317,5 @@
             </font>
         </Label>
     </AnchorPane>
+
 </AnchorPane>

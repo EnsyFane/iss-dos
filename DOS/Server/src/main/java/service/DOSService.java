@@ -181,12 +181,41 @@ public class DOSService implements IDOSService {
                 .map(d -> {
                     var user = userRepo.getById(d.getOrderedBy());
                     var name = user.map(value -> value.getFirstName() + " " + value.getLastName()).orElseGet(() -> d.getOrderedBy().toString());
-                    return new OrderDTO(name, d.getDelivered(), d.getOrderedAt(), d.getDeliveredAt());
+                    return new OrderDTO(d.getId(), name, d.getDelivered(), d.getOrderedAt(), d.getDeliveredAt());
                 })
                 .collect(Collectors.toList());
 
         _logger.traceExit("Got {} orders.", orders.size());
 
         return converted;
+    }
+
+    @Override
+    public boolean updateUser(User updatedUser) {
+        _logger.traceEntry("Adding user.");
+
+        var response = userRepo.update(updatedUser);
+
+        if (response.isEmpty()) {
+            _logger.traceExit("User could not be updated.");
+            return false;
+        }
+
+        return true;
+    }
+
+    @Override
+    public void completeOrder(Integer orderId) {
+        var order = orderRepo.getById(orderId);
+
+        if (order.isPresent()) {
+            order.get().setDelivered(true);
+            orderRepo.update(order.get());
+        }
+    }
+
+    @Override
+    public void cancelOrder(Integer orderId) {
+        orderRepo.remove(orderId);
     }
 }
